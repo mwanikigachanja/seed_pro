@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SeedInsight - Automated Crop Planning and Recommendation</title>
+    <link rel="stylesheet" href="seed-selector.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="seed-selector.html" class="active">Crop Planning</a>
+            <a href="#">Other Features</a>
+            <a href="contact.html">Contact Us</a>
+        </nav>
+    </header>
+
+    <main>
+        <section class="intro">
+            <h1>Automated Crop Planning and Recommendation</h1>
+            <p>Get personalized seed recommendations based on your location, altitude, climate, and soil type.</p>
+        </section>
+
+        <section class="form-section">
+            <form id="crop-planning-form">
+                <div class="form-group">
+                    <label for="location">Location:</label>
+                    <input type="text" id="location" name="location" placeholder="Enter your location" required>
+                </div>
+                <div class="form-group">
+                    <label for="altitude">Altitude (in meters):</label>
+                    <input type="number" id="altitude" name="altitude" placeholder="Enter altitude" required>
+                </div>
+                <div class="form-group">
+                    <label for="soil-type">Soil Type:</label>
+                    <select id="soil-type" name="soil-type">
+                        <option value="loam">Loam</option>
+                        <option value="clay">Clay</option>
+                        <option value="sand">Sand</option>
+                        <option value="silt">Silt</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="crop-type">Crop Type (optional):</label>
+                    <input type="text" id="crop-type" name="crop-type" placeholder="Enter crop type">
+                </div>
+                <button type="submit">Get Recommendations</button>
+            </form>
+        </section>
+
+        <section id="results" class="results-section">
+            <h2>Recommended Seeds</h2>
+            <table id="recommendation-table">
+                <thead>
+                    <tr>
+                        <th>Seed Name</th>
+                        <th>Expected Yield</th>
+                        <th>Optimal Planting Time</th>
+                        <th>Soil Type Compatibility</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Results will be dynamically inserted here -->
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 SeedInsight. All rights reserved.</p>
+    </footer>
+
+    <script src="selector.js"></script>
+</body>
+</html>
