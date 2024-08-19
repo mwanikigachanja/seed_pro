@@ -7,15 +7,15 @@ document.getElementById('crop-planning-form').addEventListener('submit', functio
     const soilType = document.getElementById('soil-type').value;
     const cropType = document.getElementById('crop-type').value;
 
-    // Use the altitude algorithm from index.html
+    // Use the existing altitude algorithm from index.html
     const altitudeEffect = calculateAltitudeEffect(altitude);
 
-    // Fetch data from the APIs
+    // Fetch data from APIs
     fetchLocationData(location)
         .then(locationData => fetchWeatherData(locationData))
-        .then(weatherData => fetchSoilData(locationData))
+        .then(weatherData => fetchSoilData(weatherData.locationData))
         .then(soilData => {
-            // Process data and generate recommendations
+            // Generate and display seed recommendations
             const recommendations = generateRecommendations(altitudeEffect, soilType, weatherData, soilData, cropType);
             displayRecommendations(recommendations);
         })
@@ -25,51 +25,100 @@ document.getElementById('crop-planning-form').addEventListener('submit', functio
         });
 });
 
+// Function to fetch location data from a Geolocation API
 function fetchLocationData(location) {
-    // Replace with actual API call
     return new Promise((resolve, reject) => {
-        const dummyLocationData = { latitude: -1.2921, longitude: 36.8219 }; // Example for Nairobi
-        resolve(dummyLocationData);
+        const geolocationAPI = `https://api.example.com/geolocation?location=${encodeURIComponent(location)}`;
+        fetch(geolocationAPI)
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.latitude && data.longitude) {
+                    resolve({ latitude: data.latitude, longitude: data.longitude });
+                } else {
+                    reject('Invalid location data received.');
+                }
+            })
+            .catch(error => reject(`Geolocation API error: ${error}`));
     });
 }
 
+// Function to fetch weather data from a Weather API
 function fetchWeatherData(locationData) {
-    // Replace with actual API call
     return new Promise((resolve, reject) => {
-        const dummyWeatherData = { temperature: 25, rainfall: 100 }; // Example data
-        resolve(dummyWeatherData);
+        const weatherAPI = `https://api.example.com/weather?lat=${locationData.latitude}&lon=${locationData.longitude}`;
+        fetch(weatherAPI)
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.temperature && data.rainfall) {
+                    resolve({
+                        temperature: data.temperature,
+                        rainfall: data.rainfall,
+                        locationData: locationData // Pass locationData for subsequent API calls
+                    });
+                } else {
+                    reject('Invalid weather data received.');
+                }
+            })
+            .catch(error => reject(`Weather API error: ${error}`));
     });
 }
 
+// Function to fetch soil data from a Soil API
 function fetchSoilData(locationData) {
-    // Replace with actual API call
     return new Promise((resolve, reject) => {
-        const dummySoilData = { pH: 6.5, type: 'Loam' }; // Example data
-        resolve(dummySoilData);
+        const soilAPI = `https://api.example.com/soil?lat=${locationData.latitude}&lon=${locationData.longitude}`;
+        fetch(soilAPI)
+            .then(response => response.json())
+            .then(data => {
+                if (data && data.soilType && data.pH) {
+                    resolve({
+                        soilType: data.soilType,
+                        pH: data.pH
+                    });
+                } else {
+                    reject('Invalid soil data received.');
+                }
+            })
+            .catch(error => reject(`Soil API error: ${error}`));
     });
 }
 
+// Function to generate seed recommendations based on fetched data and user inputs
 function generateRecommendations(altitudeEffect, soilType, weatherData, soilData, cropType) {
-    // This function generates seed recommendations based on all collected data
-    // Replace with your actual recommendation logic
-    const recommendations = [
-        {
+    // Placeholder recommendation logic, should be replaced with actual logic
+    let recommendations = [];
+
+    if (altitudeEffect === 'High altitude effect' && soilType === 'Loam' && weatherData.temperature > 20) {
+        recommendations.push({
             seedName: 'Maize Hybrid 611',
             expectedYield: '5-7 tons/ha',
             optimalPlantingTime: 'March - May',
             soilCompatibility: soilType
-        },
-        {
+        });
+    }
+
+    if (weatherData.rainfall > 100 && soilData.pH > 6) {
+        recommendations.push({
             seedName: 'Sorghum Sila Mass',
             expectedYield: '4-6 tons/ha',
             optimalPlantingTime: 'October - December',
             soilCompatibility: soilType
-        }
-    ];
+        });
+    }
+
+    if (cropType && cropType.toLowerCase() === 'wheat') {
+        recommendations.push({
+            seedName: 'Wheat KENYA-FAHARI',
+            expectedYield: '3-5 tons/ha',
+            optimalPlantingTime: 'May - July',
+            soilCompatibility: soilData.soilType
+        });
+    }
 
     return recommendations;
 }
 
+// Function to display seed recommendations in the table
 function displayRecommendations(recommendations) {
     const tbody = document.querySelector('#recommendation-table tbody');
     tbody.innerHTML = ''; // Clear existing rows
@@ -86,8 +135,14 @@ function displayRecommendations(recommendations) {
     });
 }
 
+// Existing altitude algorithm extracted and modified from index.html
 function calculateAltitudeEffect(altitude) {
-    // Use the existing altitude algorithm from index.html
-    // Here, we are just returning a dummy effect for demonstration purposes
-    return altitude > 1000 ? 'High altitude effect' : 'Low altitude effect';
+    // Simplified altitude effect logic
+    if (altitude > 2000) {
+        return 'High altitude effect';
+    } else if (altitude > 1000) {
+        return 'Moderate altitude effect';
+    } else {
+        return 'Low altitude effect';
+    }
 }
