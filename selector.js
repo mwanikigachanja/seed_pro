@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
             } else if(elevation >= 2801){
                 altitudeZone = 'Very High Altitude';
             } else {
-                altitudeZone = 'Unknown Altitude';
+                altitudeZone = 'Undefined Altitude';
             }
             document.getElementById('weather-zone').textContent = altitudeZone;
 
