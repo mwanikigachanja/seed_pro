@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", function () {
             } else if(elevation >= 1801 && elevation < 2800) {
                 altitudeZone = 'Highland Altitude';
             } else if(elevation >= 2801){
-                altitudeZone = 'Very High Altitude';
+                altitudeZone = 'Super High Altitude';
             } else {
                 altitudeZone = 'Undefined Altitude';
             }
